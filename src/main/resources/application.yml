@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    #    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    #    url: jdbc:mysql://localhost:3306/toy_spring
+    url: jdbc:log4jdbc:mysql://localhost:3306/toy_spring?autoReconnect=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: validate # Do not touch
+      naming:
+        physical-strategy: com.example.toyspring.appconfig.CamelCaseToUnderscoresCustom # CamelCase -> SnakeCase
+    show-sql: true
+    format-sql: true
+    use_sql_comments: true
+    type:
+      descriptor:
+        sql: trace
+    open-in-view: false
+logging:
+  level:
+    com:
+      zaxxer:
+        hikari: INFO
+    javax:
+      sql:
+        DataSource: OFF
+    jdbc:
+      audit: OFF # JDBC 트러블슈팅 경우를 제외하고는 사용 권장 X
+      resultset: OFF # ResultSet을 포함한 모든 JDBC 호출 정보를 출력
+      resultsettable: INFO  #SQL 결과 데이터 Table형식으로 출력
+      sqlonly: OFF     #SQL만 로그만 출력
+      sqltiming: INFO    #SQL + 소요시간 출력
+      connection : OFF  # 커넥션 연결/종료 정보 출력
