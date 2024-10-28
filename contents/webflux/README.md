@@ -129,6 +129,27 @@
 
 ## Reactive Core
 
+- server request processing
+    - `HttpHandler` : non-blocking I/O, Reactive Streams back pressure를 사용해 request 처리
+    - `WebHandler` API : request 처리를 위한 고수준의 web API, annotated controller, functional endpoint를 프로그래밍
+- client side
+    - `ClientHttpConnector` : HTTP client를 위한 non-blocking I/O, Reactive Streams back pressure를 사용해 request 처리
+        - `Reactor Netty`, reactive `Jetty HttpClient`, `Apache HttpComponents` 등
+        - 고수준의 `WebClient` 가 기본적으로 사용됨
+- `codecs` :  Http 요청, 응답 본문을 (역)직렬화 하는데 사용
+
+### HttpHandler
+
+### WebHandler API
+
+### Filters
+
+### Exceptions
+
+### Codecs
+
+### Logging
+
 ## DispatcherHandler
 
 ## Annotated Controllers
