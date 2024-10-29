@@ -140,6 +140,50 @@
 
 ### HttpHandler
 
+- request/response 처리를 위한 간단한 adapter
+- 다른 HTTP server API에 대한 최소한의 추상화
+
+```kotlin
+// Reactor Netty
+val handler: HttpHandler = ...
+val adapter = ReactorHttpHandlerAdapter(handler)
+HttpServer.create().host(host).port(port).handle(adapter).bindNow()
+
+// Undertow
+val handler: HttpHandler = ...
+val adapter = UndertowHttpHandlerAdapter(handler)
+val server = Undertow.builder().addHttpListener(port, host).setHandler(adapter).build()
+server.start()
+
+// Tomcat
+val handler: HttpHandler = ...
+val servlet = TomcatHttpHandlerAdapter(handler)
+
+val server = Tomcat()
+val base = File(System.getProperty("java.io.tmpdir"))
+val rootContext = server.addContext("", base.absolutePath)
+Tomcat.addServlet(rootContext, "main", servlet)
+rootContext.addServletMappingDecoded("/", "main")
+server.host = host
+server.setPort(port)
+server.start()
+
+// Jetty
+val handler: HttpHandler = ...
+val servlet = JettyHttpHandlerAdapter(handler)
+
+val server = Server()
+val contextHandler = ServletContextHandler(server, "")
+contextHandler.addServlet(ServletHolder(servlet), "/")
+contextHandler.start();
+
+val connector = ServerConnector(server)
+connector.host = host
+connector.port = port
+server.addConnector(connector)
+server.start()
+```
+
 ### WebHandler API
 
 ### Filters
