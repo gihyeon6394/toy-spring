@@ -142,6 +142,9 @@
 
 - request/response 처리를 위한 간단한 adapter
 - 다른 HTTP server API에 대한 최소한의 추상화
+- Servlet Contianer에 WAR로 배포시
+    - `AbstractReactiveWebInitializer`를 상속받아 WAR에 포함
+    - 해당 상속 클래스가 `ServletHttpHandlerAdapter` 를 사용해 `HttpHandler`를 `Servlet`으로 등록
 
 ```kotlin
 // Reactor Netty
