@@ -189,6 +189,31 @@ server.start()
 
 ### WebHandler API
 
+- `org.springframework.web.server` 패키지 : 일반적인 웹 API를 제공
+    - 여러개의 `WebExceptionHandler`, `WebFilter` 체인, 하나의 `WebHandler`로 구성
+- `WebHttpHandlerBuilder` 와 체인을 함께 스프링 `ApplicationContext`에 놓을 수 있음
+- 제공 기능
+    - 사용자 세션, attribute
+    - request attribute
+    - 요청에 대한 `Locale` or `Principal` 설정
+    - 파싱, 캐싱된 form data 에 접근
+    - multipart data 추상화
+    - ...
+
+#### Special bean types
+
+#### Form Data
+
+#### Multipart Data
+
+#### Forwarded Headers
+
+#### Non-standard Headers
+
+#### ForwardedHeaderTransformer
+
+#### Security Considerations
+
 ### Filters
 
 ### Exceptions
