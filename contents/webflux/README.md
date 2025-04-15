@@ -38,6 +38,19 @@
     - subscriber가 publisher의 데이터 속도를 제어하기 위함
     - data repository를 퍼블리셔로서 데이터를 생산하면 Http server가 구독자로서 데이터를 응답으로 작성
 
+### Reactive API
+
+#### Reactor library
+
+- reactive library Reactor는 Spring WebFlux의 기반이 되는 reactive API를 제공
+- `Mono`는 0...1개의 데이터를 비동기적으로 처리하는 API, `Flux`는 0...N개의 데이터를 비동기적으로 처리하는 API
+- non-blocking I/O, backpressure 처리를 지원
+- Spring과 함꼐 진화중
+
+#### webflux + coroutines API
+
+- webflux는 coroutines API를 지원
+
 ### Programming Model
 
 - `spring-web` 모듈에 Spring WebFlux의 기반이 되는 리액티브 요소들이 있음
@@ -202,9 +215,32 @@ server.start()
 
 #### Special bean types
 
+`WebHttpHandlerBuilder`가 자동으로 Spring ApplicationContext에 등록하는 특별한 bean 타입들
+
+https://docs.spring.io/spring-framework/reference/web/webflux/reactive-spring.html#webflux-web-handler-api-special-beans
+
 #### Form Data
 
+form data에 접근하기위해 `ServerWebExchange.getFormData()`를 사용
+
+```kotlin
+suspend fun getFormData(): MultiValueMap<String, String>
+```
+
+- `DefaultServerWebExchange`은 `HttpMessageReader`를 사용해서 `application/x-www-form-urlencoded`를 `MultiValueMap`으로 파싱
+- 디폴트로 `FormHttpMessageReader`를 `ServerCodecConfigurer`에 등록
+
 #### Multipart Data
+
+`ServerWebExchange.getMultipartData()`를 사용
+
+```kotlin
+suspend fun getMultipartData(): MultiValueMap<String, Part>
+```
+
+- `DefaultServerWebExchange`은 `HttpMessageReader`를 사용해서 `multipart/form-data`, `multipart/mixed`, `multipart/related`
+  를 `MultiValueMap`으로 파싱
+- 디폴트로 `DefaultPartHttpMessageReader`, `SynchronossPartHttpMessageReader`로 대체 가능
 
 #### Forwarded Headers
 
@@ -219,6 +255,31 @@ server.start()
 ### Exceptions
 
 ### Codecs
+
+- `spring-web`, `spring-core` 모듈은 byte content 를 직렬화(역)하는 기능을 고수준으로 제공
+- `Encoder`, `Decoder` : HTTP와 관계없이 저수준으로 (역)직렬화
+- `HttpMessageReader`, `HttpMessageWriter` : HTTP 요청, 응답 본문을 직렬화(역)하는 기능을 제공
+- `Encoder`는 `EncoderHttpMessageWriter`로, `Decoder`는 `DecoderHttpMessageReader`로 래핑해서 웹 애프리케이션에서 사용 가능
+- `DataBuffer` 는 서버별로 다른 byte buffer 구현을 추상화한 것 (e.g. Netty `ByteBuf`, `ByteBuffer`)
+
+#### Jackson JSON
+
+#### Form Data
+
+#### Multipart
+
+#### Protocol Buffers
+
+#### Limits
+
+#### Streaming
+
+#### DataBuffer
+
+- `DtaBuffer` : Webflux의 byte buffer
+- 주의 : Netty같은 서버에서 byte buffer는 풀링하고, reference counting을 사용, 반드시 release 해야함 (memory leak 방지)
+- Webflux 애플리케이션은 기본적으로 위 memory leak 이슈 신경쓰지 않아도 됨
+    - data buffer에 직접 접근하는 경우 고려해야함
 
 ### Logging
 
